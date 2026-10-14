@@ -1,0 +1,2015 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Artools Pigmentum — A caneta mais tecnológica do mundo</title>
+    <meta name="description"
+        content="Artools Pigmentum: fine liner de tinta pigmentada com ponta de 0.1 mm. Precisão, fluxo contínuo e design para criadores que exigem perfeição em cada traço." />
+    <meta name="theme-color" content="#EAEAE5" />
+    <meta property="og:title" content="Artools Pigmentum — A caneta mais tecnológica do mundo" />
+    <meta property="og:description" content="Fine liner de tinta pigmentada, ponta 0.1 mm, à prova d'água." />
+    <meta property="og:image" content="assets/poster-final.jpg" />
+
+    <!-- Marca <html> como "js" e detecta prefers-reduced-motion ANTES da pintura (evita flash de conteúdo) -->
+    <script>
+        document.documentElement.classList.add('js');
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            document.documentElement.classList.add('is-static');
+        }
+    </script>
+
+    <!-- Tipografia do design system: Inter (UI/display) + JetBrains Mono (detalhes técnicos) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" as="image" href="assets/poster-final.jpg" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet" />
+
+    <style>
+        /* =====================================================================
+           1. TOKENS — extraídos do design_system6.html
+           ===================================================================== */
+        :root {
+            /* Cores */
+            --bg: #EAEAE5;
+            /* "Base" — o tom de pedra/branco assinatura */
+            --ink: #1C1917;
+            /* "Dominant" */
+            --ink-2: #292524;
+            --stone-100: #F5F5F4;
+            --stone-200: #E7E5E4;
+            --stone-300: #D6D3D1;
+            --stone-400: #A8A29E;
+            /* "Neutral" */
+            --stone-500: #78716C;
+            --stone-600: #57534E;
+            /* texto de apoio: contraste 6:1 sobre --bg */
+            --white: #FFFFFF;
+            /* "Surface" */
+            --acid: #CCFF00;
+            /* Acento (usado com parcimônia) */
+
+            /* Tipografia */
+            --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+            --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+            /* Movimento: easing e durações do design system */
+            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+            --t-fast: .3s;
+            --t-base: .7s;
+            --t-slow: 1s;
+            --t-text: 1.2s;
+
+            /* Raios e sombras */
+            --r-pill: 9999px;
+            --r-md: .375rem;
+            --r-xl: .75rem;
+            --shadow-md: 0 4px 6px -1px rgba(28, 25, 23, .1), 0 2px 4px -2px rgba(28, 25, 23, .1);
+            --shadow-xl: 0 20px 25px -5px rgba(28, 25, 23, .12), 0 8px 10px -6px rgba(28, 25, 23, .1);
+
+            /* Layout */
+            --header-h: 4.25rem;
+            --pad-x: clamp(1.25rem, 3.4vw, 3rem);
+            --stage-w: min(72vw, calc((100svh - var(--header-h)) * 1.72));
+        }
+
+        /* =====================================================================
+           2. RESET / BASE
+           ===================================================================== */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        html {
+            -webkit-text-size-adjust: 100%;
+        }
+
+        html.lenis,
+        html.lenis body {
+            height: auto;
+        }
+
+        .lenis.lenis-smooth {
+            scroll-behavior: auto !important;
+        }
+
+        .lenis.lenis-stopped {
+            overflow: hidden;
+        }
+
+        body {
+            margin: 0;
+            font-family: var(--font-sans);
+            background: var(--bg);
+            color: var(--ink);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button {
+            font: inherit;
+            color: inherit;
+        }
+
+        ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        h1,
+        h2,
+        p {
+            margin: 0;
+        }
+
+        ::selection {
+            background: var(--ink-2);
+            color: #fff;
+        }
+
+        /* Foco visível e consistente (acessibilidade) */
+        :focus-visible {
+            outline: 2px solid var(--ink);
+            outline-offset: 4px;
+            border-radius: var(--r-pill);
+        }
+
+        .skip-link {
+            position: fixed;
+            left: 1rem;
+            top: 1rem;
+            z-index: 200;
+            padding: .75rem 1.25rem;
+            background: var(--ink);
+            color: #fff;
+            border-radius: var(--r-pill);
+            font-size: .8rem;
+            transform: translateY(-200%);
+            transition: transform var(--t-base) var(--ease);
+        }
+
+        .skip-link:focus {
+            transform: none;
+        }
+
+        /* Estados iniciais das animações de entrada (somente com JS e sem reduced-motion) */
+        .js:not(.is-static) .site-header,
+        .js:not(.is-static) .lede,
+        .js:not(.is-static) .intro .btn,
+        .js:not(.is-static) .progress__inner,
+        .js:not(.is-static) .scroll-hint__inner,
+        .js:not(.is-static) .hero__caption,
+        .js:not(.is-static) .hero__video,
+        .js:not(.is-static) .hero__canvas {
+            opacity: 0;
+        }
+
+        .js:not(.is-static) .title .tl {
+            visibility: hidden;
+        }
+
+        .js:not(.is-static) .title .tl.is-split {
+            visibility: visible;
+        }
+
+        /* =====================================================================
+           3. TEXTURA DE GRÃO (noise leve sobre tudo)
+           ===================================================================== */
+        .grain {
+            position: fixed;
+            inset: -50%;
+            width: 200%;
+            height: 200%;
+            z-index: 90;
+            pointer-events: none;
+            opacity: .075;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+            animation: grain 1.1s steps(6) infinite;
+        }
+
+        @keyframes grain {
+            0% {
+                transform: translate(0, 0);
+            }
+
+            20% {
+                transform: translate(-4%, 3%);
+            }
+
+            40% {
+                transform: translate(3%, -5%);
+            }
+
+            60% {
+                transform: translate(-6%, -2%);
+            }
+
+            80% {
+                transform: translate(5%, 4%);
+            }
+
+            100% {
+                transform: translate(0, 0);
+            }
+        }
+
+        /* =====================================================================
+           4. LOADER (tela de carregamento discreta)
+           ===================================================================== */
+        .loader {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            display: grid;
+            place-items: center;
+            background: var(--bg);
+        }
+
+        .loader__inner {
+            width: min(18rem, 70vw);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.4rem;
+        }
+
+        .loader__mark {
+            width: 3rem;
+            height: 3rem;
+            border-radius: .8rem;
+            background: var(--ink);
+            display: grid;
+            place-items: center;
+            box-shadow: var(--shadow-xl);
+            animation: loaderFloat 2.4s var(--ease) infinite;
+        }
+
+        @keyframes loaderFloat {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(0);
+            }
+
+            50% {
+                transform: translateY(-6px) rotate(8deg);
+            }
+        }
+
+        .loader__brand {
+            font-weight: 700;
+            letter-spacing: -.04em;
+            font-size: 1.15rem;
+        }
+
+        .loader__brand span {
+            color: var(--stone-400);
+        }
+
+        .loader__bar {
+            width: 100%;
+            height: 1px;
+            background: var(--stone-300);
+            overflow: hidden;
+        }
+
+        .loader__fill {
+            display: block;
+            width: 100%;
+            height: 100%;
+            background: var(--ink);
+            transform: scaleX(0);
+            transform-origin: left;
+        }
+
+        .loader__meta {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            font-family: var(--font-mono);
+            font-size: .65rem;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            color: var(--stone-500);
+        }
+
+        /* =====================================================================
+           5. CURSOR CUSTOMIZADO (apenas desktop com mouse)
+           ===================================================================== */
+        .cursor {
+            display: none;
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            .cursor {
+                display: block;
+                position: fixed;
+                left: 0;
+                top: 0;
+                z-index: 110;
+                pointer-events: none;
+            }
+
+            .cursor__dot,
+            .cursor__ring {
+                position: fixed;
+                left: 0;
+                top: 0;
+                border-radius: 50%;
+                opacity: 0;
+                transition: opacity .4s var(--ease), width .5s var(--ease), height .5s var(--ease), background-color .5s var(--ease), border-color .5s var(--ease);
+            }
+
+            .cursor__dot {
+                width: 6px;
+                height: 6px;
+                margin: -3px 0 0 -3px;
+                background: var(--ink);
+            }
+
+            .cursor__ring {
+                width: 34px;
+                height: 34px;
+                margin: -17px 0 0 -17px;
+                border: 1px solid rgba(28, 25, 23, .45);
+            }
+
+            .has-cursor .cursor__dot,
+            .has-cursor .cursor__ring {
+                opacity: 1;
+            }
+
+            .has-cursor,
+            .has-cursor a,
+            .has-cursor button {
+                cursor: none;
+            }
+
+            .cursor.is-hover .cursor__ring {
+                width: 64px;
+                height: 64px;
+                margin: -32px 0 0 -32px;
+                background: rgba(204, 255, 0, .38);
+                border-color: transparent;
+            }
+
+            .cursor.is-hover .cursor__dot {
+                opacity: 0;
+            }
+        }
+
+        /* =====================================================================
+           6. CABEÇALHO FIXO
+           ===================================================================== */
+        .site-header {
+            position: fixed;
+            inset: 0 0 auto 0;
+            z-index: 60;
+            height: var(--header-h);
+            background: rgba(234, 234, 229, .66);
+            -webkit-backdrop-filter: blur(16px) saturate(1.3);
+            backdrop-filter: blur(16px) saturate(1.3);
+            border-bottom: 1px solid rgba(214, 211, 209, .55);
+            transition: background-color var(--t-base) var(--ease), border-color var(--t-base) var(--ease);
+        }
+
+        .site-header.is-scrolled {
+            background: rgba(234, 234, 229, .86);
+            border-bottom-color: var(--stone-300);
+        }
+
+        .site-header__inner {
+            height: 100%;
+            padding: 0 var(--pad-x);
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+        }
+
+        .logo {
+            justify-self: start;
+            display: inline-flex;
+            align-items: center;
+            gap: .65rem;
+        }
+
+        .logo__mark {
+            width: 1.85rem;
+            height: 1.85rem;
+            border-radius: .5rem;
+            background: var(--ink);
+            display: grid;
+            place-items: center;
+            transition: transform var(--t-base) var(--ease);
+        }
+
+        .logo:hover .logo__mark {
+            transform: rotate(180deg);
+        }
+
+        .logo__text {
+            font-weight: 700;
+            font-size: 1.05rem;
+            letter-spacing: -.04em;
+        }
+
+        .logo__text span {
+            color: var(--stone-400);
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: clamp(1.25rem, 3vw, 2.75rem);
+        }
+
+        .nav a {
+            position: relative;
+            padding: .5rem 0;
+            font-family: var(--font-mono);
+            font-size: .72rem;
+            letter-spacing: .24em;
+            text-transform: uppercase;
+            color: var(--ink);
+            transition: color var(--t-fast) var(--ease);
+        }
+
+        /* sublinhado animado */
+        .nav a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: .1rem;
+            height: 1px;
+            background: currentColor;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform var(--t-base) var(--ease);
+        }
+
+        .nav a:hover,
+        .nav a.is-active {
+            color: var(--stone-500);
+        }
+
+        .nav a:hover::after,
+        .nav a.is-active::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .bag {
+            justify-self: end;
+            position: relative;
+            width: 2.75rem;
+            height: 2.75rem;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            border: 1px solid var(--stone-300);
+            background: transparent;
+            cursor: pointer;
+            transition: border-color var(--t-fast) var(--ease), background-color var(--t-fast) var(--ease), transform var(--t-base) var(--ease);
+        }
+
+        .bag:hover {
+            border-color: var(--ink);
+            background: var(--stone-100);
+            transform: translateY(-2px);
+        }
+
+        .bag__count {
+            position: absolute;
+            top: -.3rem;
+            right: -.3rem;
+            min-width: 1.15rem;
+            height: 1.15rem;
+            padding: 0 .3rem;
+            display: grid;
+            place-items: center;
+            border-radius: var(--r-pill);
+            background: var(--acid);
+            color: #000;
+            border: 1px solid rgba(0, 0, 0, .12);
+            font-family: var(--font-mono);
+            font-size: .62rem;
+            font-weight: 500;
+            line-height: 1;
+        }
+
+        /* =====================================================================
+           7. HERO
+           ===================================================================== */
+        .hero {
+            position: relative;
+            z-index: 1;
+            height: 100vh;
+            height: 100svh;
+            min-height: 34rem;
+            overflow: hidden;
+            background: var(--bg);
+            /* o fundo vive AQUI para o multiply do vídeo "fundir" com ele */
+        }
+
+        /* ---- 7.1 Camadas decorativas de fundo ---- */
+        .hero__bg {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .bg-grid {
+            position: absolute;
+            inset: -90px 0;
+            background-size: 40px 40px;
+            background-image:
+                linear-gradient(to right, rgba(0, 0, 0, .05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 0, 0, .05) 1px, transparent 1px);
+            -webkit-mask-image: radial-gradient(ellipse 70% 75% at 62% 50%, #000 15%, transparent 78%);
+            mask-image: radial-gradient(ellipse 70% 75% at 62% 50%, #000 15%, transparent 78%);
+        }
+
+        .glow {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(64px);
+            mix-blend-mode: multiply;
+        }
+
+        .glow--a {
+            width: 26rem;
+            height: 26rem;
+            top: 6%;
+            right: 8%;
+            background: rgba(214, 211, 209, .55);
+        }
+
+        .glow--b {
+            width: 30rem;
+            height: 30rem;
+            bottom: -8%;
+            left: 6%;
+            background: rgba(231, 229, 228, .8);
+        }
+
+        .ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(28, 25, 23, .1);
+        }
+
+        .ring--1 {
+            width: min(46vw, 44rem);
+            aspect-ratio: 1;
+            right: 8vw;
+            top: 50%;
+            margin-top: calc(min(46vw, 44rem) / -2);
+            border-style: dashed;
+            border-color: rgba(28, 25, 23, .14);
+        }
+
+        .ring--2 {
+            width: min(62vw, 60rem);
+            aspect-ratio: 1;
+            right: 0;
+            top: 50%;
+            margin-top: calc(min(62vw, 60rem) / -2);
+            margin-right: -8vw;
+        }
+
+        .cross {
+            position: absolute;
+            width: .9rem;
+            height: .9rem;
+        }
+
+        .cross::before,
+        .cross::after {
+            content: "";
+            position: absolute;
+            background: rgba(28, 25, 23, .38);
+        }
+
+        .cross::before {
+            left: 50%;
+            top: 0;
+            width: 1px;
+            height: 100%;
+        }
+
+        .cross::after {
+            top: 50%;
+            left: 0;
+            height: 1px;
+            width: 100%;
+        }
+
+        .cross--1 {
+            left: 3vw;
+            top: 20%;
+        }
+
+        .cross--2 {
+            left: 40vw;
+            bottom: 14%;
+        }
+
+        .cross--3 {
+            right: 12vw;
+            top: 16%;
+        }
+
+        .cross--4 {
+            right: 24vw;
+            bottom: 9%;
+        }
+
+        /* ---- 7.2 Vídeo / canvas ---- */
+        .hero__stage {
+            position: absolute;
+            z-index: 1;
+            top: var(--header-h);
+            bottom: 0;
+            left: calc(100vw - var(--stage-w) + 6vw);
+            width: var(--stage-w);
+            display: flex;
+            align-items: center;
+            pointer-events: none;
+        }
+
+        .hero__media {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+        }
+
+        /*
+          IMPORTANTE — fusão com o fundo:
+          mix-blend-mode só mistura com o que está atrás dentro do MESMO contexto de empilhamento.
+          Por isso nenhum ancestral do vídeo recebe transform/opacity: toda a animação
+          (parallax, entrada) é aplicada no próprio <video>/<canvas>.
+          - multiply: o branco do vídeo vira exatamente a cor do fundo (#EAEAE5)
+          - brightness: empurra o cinza do fundo do vídeo (232–253) para branco puro
+          - máscara: dissolve as bordas, sem recorte visível
+        */
+        .hero__video,
+        .hero__canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+            background: transparent;
+            mix-blend-mode: multiply;
+            filter: brightness(1.075);
+            transform-origin: 60% 55%;
+            -webkit-mask-image:
+                linear-gradient(90deg, transparent 0, #000 8%, #000 92%, transparent 100%),
+                linear-gradient(180deg, transparent 0, #000 9%, #000 91%, transparent 100%);
+            mask-image:
+                linear-gradient(90deg, transparent 0, #000 8%, #000 92%, transparent 100%),
+                linear-gradient(180deg, transparent 0, #000 9%, #000 91%, transparent 100%);
+            -webkit-mask-composite: source-in;
+            mask-composite: intersect;
+            will-change: transform;
+        }
+
+        .hero__video[hidden],
+        .hero__canvas[hidden] {
+            display: none;
+        }
+
+        .hero__video::-webkit-media-controls {
+            display: none !important;
+        }
+
+        /* ---- 7.3 Pilha de textos (intro, capítulos, final) ---- */
+        .hero__copy {
+            position: absolute;
+            z-index: 3;
+            top: var(--header-h);
+            bottom: 0;
+            left: var(--pad-x);
+            width: 60vw;
+            display: grid;
+            align-items: center;
+            pointer-events: none;
+        }
+
+        .hero__copy>* {
+            grid-area: 1 / 1;
+        }
+
+        .hero__copy a,
+        .hero__copy button {
+            pointer-events: auto;
+        }
+
+        /* Título */
+        .title {
+            font-size: clamp(2.5rem, min(6.3vw, 11vh), 8rem);
+            font-weight: 600;
+            letter-spacing: -.048em;
+            line-height: .94;
+            color: var(--ink);
+        }
+
+        .title .tl {
+            display: block;
+            white-space: nowrap;
+        }
+
+        /* máscara de revelação: cada linha é um overflow:hidden (com folga p/ acentos e descendentes) */
+        .title .line {
+            overflow: hidden;
+            padding: .12em .06em .18em;
+            margin: -.12em -.06em -.18em;
+        }
+
+        .title .word {
+            display: inline-block;
+            will-change: transform;
+        }
+
+        /* linha vazada: apenas contorno. --sa = alpha do traço, --fa = alpha do preenchimento (animados) */
+        .tl--outline {
+            --sa: .9;
+            --fa: 0;
+        }
+
+        .tl--outline .word {
+            color: rgba(28, 25, 23, var(--fa));
+            -webkit-text-stroke: 1.5px rgba(28, 25, 23, var(--sa));
+            paint-order: stroke fill;
+        }
+
+        .lede {
+            margin-top: clamp(1.1rem, 2.6vh, 2rem);
+            max-width: 31rem;
+            font-size: clamp(1rem, 1.25vw, 1.2rem);
+            line-height: 1.65;
+            color: var(--stone-600);
+        }
+
+        .cta {
+            margin-top: clamp(1.5rem, 3.6vh, 2.5rem);
+            display: flex;
+            flex-wrap: wrap;
+            gap: .9rem;
+        }
+
+        /* ---- 7.4 Botões em pílula ---- */
+        .btn {
+            position: relative;
+            isolation: isolate;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 3.5rem;
+            padding: 0 2rem;
+            border: 0;
+            border-radius: var(--r-pill);
+            font-family: var(--font-sans);
+            font-size: .78rem;
+            font-weight: 600;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            white-space: nowrap;
+            cursor: pointer;
+            will-change: transform;
+            transition: background-color var(--t-base) var(--ease), box-shadow var(--t-base) var(--ease), color var(--t-base) var(--ease);
+        }
+
+        .btn__label {
+            position: relative;
+            z-index: 2;
+            display: inline-flex;
+            align-items: center;
+            gap: .7rem;
+            will-change: transform;
+        }
+
+        .btn__icon {
+            width: 1.1rem;
+            height: 1.1rem;
+            transition: transform var(--t-base) var(--ease);
+        }
+
+        .btn--primary {
+            background: var(--ink);
+            color: #fff;
+            box-shadow: 0 10px 24px -10px rgba(28, 25, 23, .6);
+        }
+
+        .btn--primary:hover {
+            background: var(--ink-2);
+            box-shadow: 0 24px 40px -14px rgba(28, 25, 23, .65);
+        }
+
+        .btn--primary:hover .btn__icon {
+            transform: translateX(5px);
+        }
+
+        /* brilho que varre o botão (shimmer do design system) */
+        .btn__shine {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            overflow: hidden;
+            border-radius: inherit;
+            pointer-events: none;
+        }
+
+        .btn__shine::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 55%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .22), transparent);
+            transform: translateX(-100%) skewX(-15deg);
+            opacity: 0;
+        }
+
+        .btn--primary:hover .btn__shine::before {
+            opacity: 1;
+            animation: shimmer 1.1s var(--ease) infinite;
+        }
+
+        @keyframes shimmer {
+            from {
+                transform: translateX(-100%) skewX(-15deg);
+            }
+
+            to {
+                transform: translateX(260%) skewX(-15deg);
+            }
+        }
+
+        .btn--secondary {
+            background: var(--white);
+            color: var(--ink);
+            box-shadow: 0 1px 2px rgba(28, 25, 23, .06), 0 12px 30px -14px rgba(28, 25, 23, .3);
+        }
+
+        .btn--secondary:hover {
+            box-shadow: 0 1px 2px rgba(28, 25, 23, .06), 0 26px 44px -16px rgba(28, 25, 23, .36);
+        }
+
+        .btn--secondary:hover .btn__icon {
+            animation: nudgeDown 1s var(--ease) infinite;
+        }
+
+        @keyframes nudgeDown {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(4px);
+            }
+        }
+
+        /* ---- 7.5 Capítulos e bloco final ---- */
+        .chapter,
+        .final {
+            max-width: 30rem;
+        }
+
+        .kicker {
+            display: flex;
+            align-items: center;
+            gap: .9rem;
+            font-family: var(--font-mono);
+            font-size: .72rem;
+            letter-spacing: .24em;
+            text-transform: uppercase;
+            color: var(--stone-500);
+        }
+
+        .kicker__num {
+            color: var(--ink);
+        }
+
+        .kicker__bar {
+            width: 2.5rem;
+            height: 1px;
+            background: var(--stone-400);
+        }
+
+        .chapter__title,
+        .final__title {
+            margin-top: 1.1rem;
+            font-size: clamp(2rem, min(3.9vw, 7vh), 4.2rem);
+            font-weight: 600;
+            letter-spacing: -.045em;
+            line-height: 1;
+        }
+
+        .outline {
+            color: transparent;
+            -webkit-text-stroke: 1.2px rgba(28, 25, 23, .85);
+        }
+
+        .chapter__text {
+            margin-top: 1.25rem;
+            font-size: clamp(.98rem, 1.1vw, 1.1rem);
+            line-height: 1.65;
+            color: var(--stone-600);
+        }
+
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .5rem;
+            margin-top: 1.5rem;
+        }
+
+        .chips li {
+            padding: .4rem .8rem;
+            border: 1px solid rgba(28, 25, 23, .2);
+            border-radius: var(--r-pill);
+            background: rgba(255, 255, 255, .5);
+            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px);
+            font-family: var(--font-mono);
+            font-size: .68rem;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+        }
+
+        .final .cta {
+            margin-top: 2rem;
+        }
+
+        /* ---- 7.6 Indicador de progresso (extrema direita) ---- */
+        .progress {
+            position: absolute;
+            z-index: 4;
+            top: var(--header-h);
+            bottom: 0;
+            right: clamp(1rem, 2.2vw, 2.25rem);
+            display: flex;
+            align-items: center;
+            pointer-events: none;
+        }
+
+        .progress__inner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            font-family: var(--font-mono);
+        }
+
+        .progress__digits {
+            position: relative;
+            display: block;
+            width: 2.2rem;
+            height: 1.4rem;
+            overflow: hidden;
+            text-align: center;
+            font-size: 1.05rem;
+            font-weight: 500;
+            letter-spacing: .08em;
+        }
+
+        .progress__digits span {
+            position: absolute;
+            inset: 0;
+            line-height: 1.4rem;
+            opacity: 0;
+        }
+
+        .progress__digits span:first-child {
+            opacity: 1;
+        }
+
+        .progress__line {
+            position: relative;
+            width: 1px;
+            height: clamp(7rem, 24vh, 11rem);
+            background: var(--stone-300);
+            overflow: hidden;
+        }
+
+        .progress__fill {
+            position: absolute;
+            inset: 0;
+            background: var(--ink);
+            transform: scaleY(0);
+            transform-origin: top;
+        }
+
+        .progress__total {
+            font-size: .62rem;
+            letter-spacing: .2em;
+            color: var(--stone-500);
+        }
+
+        /* ---- 7.7 Indicador "Scroll to control" ---- */
+        .scroll-hint {
+            position: absolute;
+            z-index: 4;
+            left: 0;
+            right: 0;
+            bottom: clamp(1rem, 3.5vh, 2.25rem);
+            display: flex;
+            justify-content: center;
+            pointer-events: none;
+        }
+
+        .scroll-hint__inner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: .8rem;
+            font-family: var(--font-mono);
+            font-size: .62rem;
+            letter-spacing: .34em;
+            text-transform: uppercase;
+            color: var(--stone-500);
+        }
+
+        .scroll-hint__line {
+            position: relative;
+            width: 1px;
+            height: 3rem;
+            background: var(--stone-300);
+            overflow: hidden;
+        }
+
+        .scroll-hint__line::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 55%;
+            background: var(--ink);
+            animation: slideLine 2s var(--ease) infinite;
+        }
+
+        @keyframes slideLine {
+            0% {
+                transform: translateY(-100%);
+            }
+
+            100% {
+                transform: translateY(200%);
+            }
+        }
+
+        .hero__caption {
+            position: absolute;
+            z-index: 4;
+            left: var(--pad-x);
+            bottom: clamp(1rem, 3.5vh, 2.25rem);
+            font-family: var(--font-mono);
+            font-size: .62rem;
+            letter-spacing: .24em;
+            text-transform: uppercase;
+            color: var(--stone-500);
+            pointer-events: none;
+        }
+
+        /* =====================================================================
+           8. RESPONSIVO
+           ===================================================================== */
+        @media (max-width: 1100px) {
+            .nav {
+                gap: 1.25rem;
+            }
+
+            .hero__copy {
+                width: 66vw;
+            }
+        }
+
+        @media (max-width: 860px) {
+            :root {
+                --header-h: 3.75rem;
+            }
+
+            .nav,
+            .progress,
+            .hero__caption,
+            .cross--2,
+            .cross--4 {
+                display: none;
+            }
+
+            .site-header__inner {
+                grid-template-columns: 1fr auto;
+            }
+
+            /* texto em cima, vídeo embaixo */
+            .hero__copy {
+                top: calc(var(--header-h) + 1.1rem);
+                bottom: auto;
+                left: 0;
+                right: 0;
+                width: auto;
+                padding: 0 var(--pad-x);
+                align-items: start;
+            }
+
+            .title {
+                font-size: clamp(2.2rem, 9.6vw, 3.8rem);
+            }
+
+            .lede {
+                font-size: .98rem;
+            }
+
+            .cta {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .chapter,
+            .final {
+                max-width: none;
+            }
+
+            .chapter__title,
+            .final__title {
+                font-size: clamp(1.9rem, 8vw, 2.8rem);
+            }
+
+            .hero__stage {
+                top: auto;
+                bottom: 2svh;
+                left: -25vw;
+                width: 150vw;
+                height: auto;
+            }
+
+            .ring--1 {
+                width: 120vw;
+                right: -20vw;
+                margin-top: -10vw;
+            }
+
+            .ring--2 {
+                display: none;
+            }
+
+            .scroll-hint {
+                bottom: .6rem;
+            }
+
+            .scroll-hint__line {
+                height: 1.8rem;
+            }
+        }
+
+        /* =====================================================================
+           9. MODO ESTÁTICO (prefers-reduced-motion ou falha das bibliotecas):
+              sem pin, sem scrub, vídeo parado no frame final e conteúdo estático
+           ===================================================================== */
+        .is-static .loader,
+        .is-static .grain,
+        .is-static .cursor,
+        .is-static .progress,
+        .is-static .scroll-hint,
+        .is-static .final {
+            display: none !important;
+        }
+
+        .is-static .grain {
+            animation: none;
+        }
+
+        .is-static .hero {
+            height: auto;
+            min-height: 100svh;
+            padding: calc(var(--header-h) + 2.5rem) var(--pad-x) 4rem;
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+        }
+
+        .is-static .hero__copy {
+            position: relative;
+            inset: auto;
+            width: auto;
+            max-width: 64rem;
+            padding: 0;
+            display: block;
+            pointer-events: auto;
+        }
+
+        .is-static .hero__copy .chapter {
+            display: inline-block;
+            vertical-align: top;
+            width: min(100%, 18rem);
+            margin: 2.5rem 2rem 0 0;
+        }
+
+        .is-static .hero__stage {
+            position: relative;
+            inset: auto;
+            order: 2;
+            width: min(100%, 72rem);
+            margin: 0 auto;
+        }
+
+        .is-static .hero__bg .ring,
+        .is-static .hero__bg .cross {
+            display: none;
+        }
+
+        .is-static .title .tl {
+            visibility: visible;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: .001ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: .001ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+    <noscript>
+        <style>
+            .loader {
+                display: none;
+            }
+        </style>
+    </noscript>
+</head>
+
+<body>
+    <a class="skip-link" href="#hero">Pular para o conteúdo</a>
+
+    <!-- Textura de grão e cursor customizado -->
+    <div class="grain" aria-hidden="true"></div>
+    <div class="cursor" id="cursor" aria-hidden="true">
+        <span class="cursor__ring"></span>
+        <span class="cursor__dot"></span>
+    </div>
+
+    <!-- Tela de carregamento -->
+    <div class="loader" id="loader" role="status" aria-live="polite">
+        <div class="loader__inner">
+            <div class="loader__mark" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 3 17.5 13 12 21 6.5 13Z" fill="#fff" />
+                    <circle cx="12" cy="12.4" r="1.3" fill="#1C1917" />
+                    <path d="M12 13.4V21" stroke="#1C1917" stroke-width="1.2" stroke-linecap="round" />
+                </svg>
+            </div>
+            <p class="loader__brand">ARTOOLS<span>.PRO</span></p>
+            <div class="loader__bar" aria-hidden="true"><span class="loader__fill" id="loader-fill"></span></div>
+            <p class="loader__meta"><span>Preparando a experiência</span><span id="loader-pct">000</span></p>
+        </div>
+    </div>
+
+    <!-- Cabeçalho fixo -->
+    <header class="site-header" id="site-header">
+        <div class="site-header__inner">
+            <a class="logo" href="#hero" aria-label="Artools.Pro — início">
+                <span class="logo__mark" aria-hidden="true">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 3 17.5 13 12 21 6.5 13Z" fill="#fff" />
+                        <circle cx="12" cy="12.4" r="1.3" fill="#1C1917" />
+                        <path d="M12 13.4V21" stroke="#1C1917" stroke-width="1.2" stroke-linecap="round" />
+                    </svg>
+                </span>
+                <span class="logo__text">ARTOOLS<span>.PRO</span></span>
+            </a>
+
+            <nav class="nav" aria-label="Navegação principal">
+                <a href="#design" data-goto="0.2">Design</a>
+                <a href="#technology" data-goto="0.44">Technology</a>
+                <a href="#specs" data-goto="0.68">Specs</a>
+            </nav>
+
+            <button class="bag" id="bag" type="button" aria-label="Sacola de compras, 0 itens">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M5 8h14l-1 12H6L5 8Z" />
+                    <path d="M9 8V6a3 3 0 0 1 6 0v2" />
+                </svg>
+                <span class="bag__count" id="bag-count" aria-hidden="true">0</span>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero" id="hero" aria-labelledby="hero-title">
+
+            <!-- Camadas decorativas (parallax em velocidades diferentes) -->
+            <div class="hero__bg" aria-hidden="true">
+                <div class="bg-grid" data-parallax="grid"></div>
+                <div class="glow glow--a"></div>
+                <div class="glow glow--b"></div>
+                <div class="ring ring--2"></div>
+                <div class="ring ring--1"></div>
+                <span class="cross cross--1"></span>
+                <span class="cross cross--2"></span>
+                <span class="cross cross--3"></span>
+                <span class="cross cross--4"></span>
+            </div>
+
+            <!-- Vídeo da caneta (controlado pelo scroll) + canvas para o modo "frames" -->
+            <div class="hero__stage">
+                <div class="hero__media">
+                    <video class="hero__video" id="pen-video" muted playsinline webkit-playsinline preload="auto"
+                        poster="assets/poster-final.jpg" disablepictureinpicture disableremoteplayback tabindex="-1"
+                        aria-label="Caneta Artools Pigmentum flutuando, girando e escrevendo em um caderno">
+                        <!-- versão all-intra (todo frame é keyframe) = scrub suave. Se não existir, usa o original -->
+                        <source src="assets/pen-scrub.mp4" type="video/mp4" />
+                        <source src="assets/raw_files/Pen_writing_in_notebook_20261014112528.mp4" type="video/mp4" />
+                    </video>
+                    <canvas class="hero__canvas" id="pen-canvas" hidden aria-hidden="true"></canvas>
+                </div>
+            </div>
+
+            <!-- Pilha de textos: intro → capítulos → final (todos na mesma célula do grid) -->
+            <div class="hero__copy" id="copy">
+
+                <!-- INTRO -->
+                <div class="intro" id="intro">
+                    <h1 class="title" id="hero-title" data-lift>
+                        <span class="tl">A caneta</span>
+                        <span class="tl tl--outline">mais tecnológica</span>
+                        <span class="tl">do mundo.</span>
+                    </h1>
+                    <div class="lift" data-lift>
+                        <p class="lede">A Artools Pigmentum redefine o equilíbrio entre precisão, fluxo e design. Feita
+                            para criadores que exigem perfeição em cada traço.</p>
+                    </div>
+                    <div class="lift" data-lift>
+                        <div class="cta">
+                            <button class="btn btn--primary" type="button" data-buy data-magnetic>
+                                <span class="btn__shine" aria-hidden="true"></span>
+                                <span class="btn__label">Comprar Agora
+                                    <svg class="btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                                        aria-hidden="true">
+                                        <path d="M5 12h14M13 6l6 6-6 6" />
+                                    </svg>
+                                </span>
+                            </button>
+                            <a class="btn btn--secondary" href="#design" data-goto="0.2" data-magnetic>
+                                <span class="btn__label">Explorar
+                                    <svg class="btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                                        aria-hidden="true">
+                                        <path d="M12 5v14M6 13l6 6 6-6" />
+                                    </svg>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CAPÍTULO 1 -->
+                <article class="chapter" id="design" aria-labelledby="ch1-title">
+                    <p class="kicker"><span class="kicker__num">01</span><span class="kicker__bar"></span>Precisão</p>
+                    <h2 class="chapter__title" id="ch1-title">Ponta <span class="outline">0.1 mm</span> de precisão</h2>
+                    <p class="chapter__text">Uma ponta ultrafina para linhas nítidas, detalhes minuciosos e hachuras que
+                        respeitam cada milímetro do papel.</p>
+                    <ul class="chips" aria-label="Destaques">
+                        <li>0.1 mm</li>
+                        <li>Fine liner</li>
+                    </ul>
+                </article>
+
+                <!-- CAPÍTULO 2 -->
+                <article class="chapter" id="technology" aria-labelledby="ch2-title">
+                    <p class="kicker"><span class="kicker__num">02</span><span class="kicker__bar"></span>Tecnologia
+                    </p>
+                    <h2 class="chapter__title" id="ch2-title">Tinta pigmentada <span class="outline">à prova
+                            d'água</span></h2>
+                    <p class="chapter__text">O pigmento fixa no papel e resiste à água e ao borrão: o traço permanece,
+                        pronto para receber aquarela por cima.</p>
+                    <ul class="chips" aria-label="Destaques">
+                        <li>Pigmentada</li>
+                        <li>À prova d'água</li>
+                    </ul>
+                </article>
+
+                <!-- CAPÍTULO 3 -->
+                <article class="chapter" id="specs" aria-labelledby="ch3-title">
+                    <p class="kicker"><span class="kicker__num">03</span><span class="kicker__bar"></span>Fluxo</p>
+                    <h2 class="chapter__title" id="ch3-title">Traço contínuo, <span class="outline">sem falhas</span>
+                    </h2>
+                    <p class="chapter__text">Fluxo estável do primeiro ao último traço: sem engasgos, sem manchas, sem
+                        interrupções no meio do desenho.</p>
+                    <ul class="chips" aria-label="Destaques">
+                        <li>Traço contínuo</li>
+                        <li>Sem falhas</li>
+                    </ul>
+                </article>
+
+                <!-- CAPÍTULO 4 / CHAMADA FINAL (reaparecem os botões ao lado do frame final) -->
+                <div class="final" id="final">
+                    <p class="kicker"><span class="kicker__num">04</span><span class="kicker__bar"></span>Artools
+                        Pigmentum</p>
+                    <h2 class="final__title">Cada traço, <span class="outline">com perfeição.</span></h2>
+                    <p class="chapter__text">Fine liner de tinta pigmentada, ponta 0.1 mm. Feita para quem não aceita
+                        menos do que o traço exato.</p>
+                    <div class="cta">
+                        <button class="btn btn--primary" type="button" data-buy data-magnetic>
+                            <span class="btn__shine" aria-hidden="true"></span>
+                            <span class="btn__label">Comprar Agora
+                                <svg class="btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                                    aria-hidden="true">
+                                    <path d="M5 12h14M13 6l6 6-6 6" />
+                                </svg>
+                            </span>
+                        </button>
+                        <a class="btn btn--secondary" href="#design" data-goto="0.2" data-magnetic>
+                            <span class="btn__label">Explorar
+                                <svg class="btn__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+                                    aria-hidden="true">
+                                    <path d="M12 5v14M6 13l6 6 6-6" />
+                                </svg>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Indicador vertical de capítulo/progresso -->
+            <aside class="progress" aria-hidden="true">
+                <div class="progress__inner">
+                    <span class="progress__digits" id="prog-digits"><span>01</span><span>02</span><span>03</span><span>04</span></span>
+                    <span class="progress__line"><span class="progress__fill" id="prog-fill"></span></span>
+                    <span class="progress__total">/ 04</span>
+                </div>
+            </aside>
+
+            <p class="hero__caption" aria-hidden="true">Fine liner · Tinta pigmentada · 0.1 mm</p>
+
+            <div class="scroll-hint" id="scroll-hint" aria-hidden="true">
+                <div class="scroll-hint__inner">
+                    <span>Scroll to control</span>
+                    <i class="scroll-hint__line"></i>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- =====================================================================
+         BIBLIOTECAS (CDN, sem build)
+         - GSAP + ScrollTrigger: pin da Hero, timelines e animações
+         - CustomEase (do próprio GSAP): reproduz EXATAMENTE o easing do design system
+           cubic-bezier(0.16, 1, 0.3, 1) nas animações em JS
+         - Lenis: scroll suave integrado ao ScrollTrigger
+         - SplitType: divide o título em linhas/palavras para a revelação com máscara
+         ===================================================================== -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/CustomEase.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/split-type@0.3.4/umd/index.min.js"></script>
+
+    <script>
+        (() => {
+            'use strict';
+
+            /* =================================================================
+               1. CONFIGURAÇÃO
+               ================================================================= */
+            const CONFIG = {
+                // "video"  → scrub do currentTime do <video>
+                // "frames" → sequência de imagens desenhada em <canvas> (técnica da Apple)
+                MODE: 'video',
+
+                // Pasta com frame_0001.webp, frame_0002.webp, ...
+                FRAMES_DIR: 'frames/',
+                FRAME_COUNT: 192,          // 8 s × 24 fps
+                FRAME_EXT: 'webp',
+                FRAME_PAD: 4,
+
+                // No celular (onde o seek do vídeo costuma travar, principalmente no iOS)
+                // usa "frames" automaticamente SE a pasta existir; senão continua em "video".
+                MOBILE_PREFERS_FRAMES: true,
+
+                SCROLL_LENGTH_VH: 380,     // distância do trecho fixado (300–400vh)
+                SCROLL_LENGTH_VH_MOBILE: 340,
+                SMOOTHING: 7,              // maior = acompanha o scroll mais rápido (menor = mais "líquido")
+                VIDEO_END_AT: 0.9,         // o vídeo termina em 90% do scroll; o resto segura o frame final
+
+                // Janelas dos capítulos (em fração do progresso 0–1): [entra, sai]
+                CHAPTERS: [[0.15, 0.29], [0.34, 0.52], [0.57, 0.76]],
+                FINAL_IN: 0.84,
+                // Limites dos 4 capítulos no indicador lateral
+                INDICATOR_BREAKS: [0.32, 0.55, 0.80]
+            };
+
+            /* =================================================================
+               2. UTILIDADES
+               ================================================================= */
+            const $ = (s, c = document) => c.querySelector(s);
+            const $$ = (s, c = document) => Array.from(c.querySelectorAll(s));
+            const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+            const html = document.documentElement;
+            const isStatic = () => html.classList.contains('is-static');
+            const isMobile = window.matchMedia('(max-width: 860px)').matches || matchMedia('(pointer: coarse)').matches;
+            const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+            const wait = (ms) => new Promise(r => setTimeout(r, ms));
+
+            const video = $('#pen-video');
+            const canvas = $('#pen-canvas');
+            const loader = $('#loader');
+
+            /* =================================================================
+               3. MÍDIA — abstrai "video" e "frames" atrás da mesma interface
+               ================================================================= */
+            const media = (() => {
+                let mode = 'video';
+                let duration = 0;
+                let ready = false;
+
+                // estado do modo vídeo
+                let lastTarget = -1, lastSeekAt = 0, seekingSince = 0, stalls = 0, triedFrames = false;
+
+                // estado do modo frames
+                let frames = [], frameIdx = -1, ctx = null;
+
+                const frameURL = (i) => CONFIG.FRAMES_DIR + 'frame_' + String(i).padStart(CONFIG.FRAME_PAD, '0') + '.' + CONFIG.FRAME_EXT;
+
+                /** Verifica se a pasta de frames existe (tenta carregar o primeiro) */
+                const probeFrames = () => new Promise(res => {
+                    const img = new Image();
+                    const t = setTimeout(() => res(false), 2500);
+                    img.onload = () => { clearTimeout(t); res(true); };
+                    img.onerror = () => { clearTimeout(t); res(false); };
+                    img.src = frameURL(1);
+                });
+
+                /** Pré-carrega todos os frames, reportando o progresso (0–1) */
+                const loadFrames = (onProgress) => new Promise(res => {
+                    frames = new Array(CONFIG.FRAME_COUNT);
+                    let loaded = 0;
+                    const done = () => { loaded++; onProgress && onProgress(loaded / CONFIG.FRAME_COUNT); if (loaded === CONFIG.FRAME_COUNT) res(); };
+                    for (let i = 0; i < CONFIG.FRAME_COUNT; i++) {
+                        const img = new Image();
+                        img.decoding = 'async';
+                        img.onload = img.onerror = done;
+                        img.src = frameURL(i + 1);
+                        frames[i] = img;
+                    }
+                });
+
+                const enterFramesMode = () => {
+                    mode = 'frames';
+                    const first = frames[0];
+                    canvas.width = first.naturalWidth || 1280;
+                    canvas.height = first.naturalHeight || 720;
+                    ctx = canvas.getContext('2d');
+                    canvas.hidden = false;
+                    video.hidden = true;
+                    frameIdx = -1;
+                };
+
+                const drawFrame = (i) => {
+                    // se o frame ainda não carregou, usa o anterior mais próximo
+                    let img = frames[i];
+                    for (let k = i; k >= 0 && !(frames[k] && frames[k].naturalWidth); k--) img = frames[k - 1];
+                    if (!img || !img.naturalWidth) return;
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                };
+
+                /** Carrega os metadados + buffer do vídeo, com progresso */
+                const loadVideo = (onProgress) => new Promise(res => {
+                    let finished = false;
+                    const finish = (ok) => { if (finished) return; finished = true; clearInterval(iv); onProgress(1); res(ok); };
+                    const check = () => {
+                        if (video.readyState >= 1 && video.duration) {
+                            let b = 0;
+                            try { b = video.buffered.length ? video.buffered.end(video.buffered.length - 1) / video.duration : 0; } catch (e) { }
+                            onProgress(Math.min(b, .99));
+                            if (b >= .995 || video.readyState >= 4) finish(true);
+                        }
+                    };
+                    const iv = setInterval(check, 120);
+                    video.addEventListener('loadedmetadata', check);
+                    video.addEventListener('progress', check);
+                    video.addEventListener('canplaythrough', () => finish(true), { once: true });
+                    const lastSource = $$('source', video).pop();
+                    if (lastSource) lastSource.addEventListener('error', () => finish(false));
+                    setTimeout(() => finish(video.readyState >= 1), 9000);   // não prende o usuário no loader
+                    if (video.readyState >= 1) check();
+                });
+
+                /** Inicializa a mídia. Retorna quando o efeito já pode começar. */
+                async function init(onProgress) {
+                    let wantFrames = CONFIG.MODE === 'frames' || (isMobile && CONFIG.MOBILE_PREFERS_FRAMES);
+                    if (wantFrames) wantFrames = await probeFrames();
+
+                    if (wantFrames) {
+                        await loadFrames(onProgress);
+                        enterFramesMode();
+                        ready = true;
+                        duration = CONFIG.FRAME_COUNT / 24;
+                        return true;
+                    }
+
+                    mode = 'video';
+                    video.pause();
+                    const ok = await loadVideo(onProgress);
+                    duration = video.duration || 0;
+                    ready = ok && duration > 0;
+                    if (ready) {
+                        // iOS só permite "seek" depois de uma interação/reprodução: destrava com play→pause silencioso
+                        if (isIOS) { try { await video.play(); video.pause(); } catch (e) { } }
+                        video.currentTime = 0.001;
+                    }
+                    return ready;
+                }
+
+                /** Mostra o frame final parado (modo estático) */
+                function showFinal() {
+                    const go = () => { try { video.currentTime = Math.max(0, video.duration - 0.05); } catch (e) { } };
+                    if (video.readyState >= 1) go(); else video.addEventListener('loadedmetadata', go, { once: true });
+                }
+
+                /** Tenta migrar para frames caso o seek do vídeo trave */
+                async function fallbackToFrames() {
+                    if (triedFrames) return;
+                    triedFrames = true;
+                    if (!(await probeFrames())) return;
+                    await loadFrames();
+                    enterFramesMode();
+                }
+
+                /** Aplica o progresso (0–1) do vídeo */
+                function render(p) {
+                    if (!ready) return;
+                    if (mode === 'frames') {
+                        const i = Math.round(clamp(p) * (frames.length - 1));
+                        if (i !== frameIdx) { frameIdx = i; drawFrame(i); }
+                        return;
+                    }
+                    const t = clamp(p) * Math.max(0, duration - 0.05);
+                    lastTarget = t;
+                    if (Math.abs(t - video.currentTime) < 0.008) return;
+                    const now = performance.now();
+                    // evita empilhar seeks: só pede outro se o anterior terminou (ou passou de ~90 ms)
+                    if (video.seeking && now - lastSeekAt < 90) return;
+                    lastSeekAt = now;
+                    video.currentTime = t;
+                }
+
+                /** Vigia seek travado (chamado a cada tick) */
+                function watch(now) {
+                    if (mode !== 'video' || !ready) return;
+                    if (video.seeking) {
+                        if (!seekingSince) seekingSince = now;
+                        else if (now - seekingSince > 1400) {
+                            seekingSince = 0; stalls++;
+                            video.currentTime = lastTarget;
+                            if (stalls >= 2) fallbackToFrames();
+                        }
+                    } else seekingSince = 0;
+                }
+
+                return { init, render, watch, showFinal, get ready() { return ready; } };
+            })();
+
+            /* =================================================================
+               4. MODO ESTÁTICO (reduced-motion ou bibliotecas indisponíveis)
+               ================================================================= */
+            function bootStatic() {
+                html.classList.add('is-static');
+                loader.style.display = 'none';
+                media.showFinal();
+                // ainda permite clicar em "Comprar Agora" e rolar normalmente
+                initBag();
+            }
+
+            /* =================================================================
+               5. INTERAÇÕES COMUNS
+               ================================================================= */
+            let bagN = 0;
+            function initBag() {
+                const bag = $('#bag'), count = $('#bag-count');
+                $$('[data-buy]').forEach(btn => btn.addEventListener('click', () => {
+                    bagN++;
+                    count.textContent = bagN;
+                    bag.setAttribute('aria-label', `Sacola de compras, ${bagN} ${bagN === 1 ? 'item' : 'itens'}`);
+                    if (window.gsap && !isStatic()) {
+                        gsap.fromTo(count, { scale: 1.9 }, { scale: 1, duration: .9, ease: 'elastic.out(1,.45)' });
+                        gsap.fromTo(bag, { y: -4 }, { y: 0, duration: .9, ease: 'elastic.out(1,.4)' });
+                    }
+                }));
+            }
+
+            /* =================================================================
+               6. EXPERIÊNCIA ANIMADA
+               ================================================================= */
+            async function bootAnimated() {
+                gsap.registerPlugin(ScrollTrigger, CustomEase);
+                CustomEase.create('ds', '0.16,1,0.3,1');           // easing do design system
+                ScrollTrigger.config({ ignoreMobileResize: true });
+                gsap.defaults({ ease: 'ds' });
+
+                history.scrollRestoration = 'manual';
+                window.scrollTo(0, 0);
+
+                /* ---- 6.1 Scroll suave (Lenis) integrado ao ScrollTrigger ---- */
+                const lenis = new Lenis({
+                    duration: 1.15,
+                    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+                    smoothWheel: true,
+                    wheelMultiplier: .9
+                });
+                lenis.on('scroll', ScrollTrigger.update);
+                gsap.ticker.add((time) => lenis.raf(time * 1000));
+                gsap.ticker.lagSmoothing(0);
+                lenis.stop();                                      // trava a rolagem durante o loading
+
+                /* ---- 6.2 Loader: progresso real do vídeo ---- */
+                const fill = $('#loader-fill'), pct = $('#loader-pct');
+                let real = 0, shown = 0;
+                const pctTick = () => {
+                    shown += (real - shown) * .12;
+                    gsap.set(fill, { scaleX: shown });
+                    pct.textContent = String(Math.round(shown * 100)).padStart(3, '0');
+                };
+                gsap.ticker.add(pctTick);
+
+                const fontsReady = Promise.race([document.fonts ? document.fonts.ready : Promise.resolve(), wait(2500)]);
+                await Promise.all([media.init(p => { real = p; }), fontsReady, wait(1100)]);
+
+                real = 1;
+                await wait(350);                                   // deixa a barra chegar a 100%
+                gsap.ticker.remove(pctTick);
+                gsap.set(fill, { scaleX: 1 });
+                pct.textContent = '100';
+
+                /* ---- 6.3 Quebra do título em linhas/palavras (SplitType) ---- */
+                const lines = $$('.title .tl');
+                lines.forEach(l => { new SplitType(l, { types: 'lines,words', tagName: 'span' }); l.classList.add('is-split'); });
+                const wordsPerLine = lines.map(l => $$('.word', l));
+                gsap.set(wordsPerLine.flat(), { yPercent: 115 });
+                gsap.set('.tl--outline', { '--sa': 0, '--fa': 0 });
+                gsap.set('.intro .btn', { yPercent: 70 });
+
+                /* ---- 6.4 Linha do tempo do SCROLL (duração normalizada = 1 = 0–100% do pin) ---- */
+                const scrollTL = gsap.timeline({ paused: true, defaults: { ease: 'none' } });
+                scrollTL.to({}, { duration: 1 }, 0);               // garante duração total 1
+
+                // (a) título, parágrafo e botões sobem e somem (velocidades ligeiramente diferentes = parallax)
+                scrollTL
+                    .to('.title[data-lift]', { y: -90, opacity: 0, duration: .11, ease: 'power2.in' }, 0)
+                    .to('.lift:nth-of-type(1)', { y: -70, opacity: 0, duration: .11, ease: 'power2.in' }, .01)
+                    .to('.lift:nth-of-type(2)', { y: -50, opacity: 0, duration: .11, ease: 'power2.in' }, .02);
+
+                // (b) capítulos: entram em cascata, saem subindo
+                $$('.chapter').forEach((el, i) => {
+                    const [tin, tout] = CONFIG.CHAPTERS[i];
+                    scrollTL
+                        .fromTo(el.children, { y: 44, opacity: 0 }, { y: 0, opacity: 1, duration: .055, stagger: .012, ease: 'power3.out' }, tin)
+                        .to(el, { y: -36, opacity: 0, duration: .05, ease: 'power2.in' }, tout);
+                });
+
+                // (c) chamada final: reaparece com os botões em destaque
+                scrollTL.fromTo('.final > *', { y: 48, opacity: 0 }, { y: 0, opacity: 1, duration: .07, stagger: .014, ease: 'power3.out' }, CONFIG.FINAL_IN);
+
+                // (d) parallax contínuo: camadas se movem em velocidades distintas
+                scrollTL
+                    .to(video, { scale: 1.09, yPercent: -3, duration: 1 }, 0)
+                    .to(canvas, { scale: 1.09, yPercent: -3, duration: 1 }, 0)
+                    .to('.glow--a', { x: 90, y: -190, duration: 1 }, 0)
+                    .to('.glow--b', { x: -70, y: -110, duration: 1 }, 0)
+                    .to('.ring--1', { rotation: 70, y: -40, duration: 1 }, 0)
+                    .to('.ring--2', { rotation: -45, y: 30, duration: 1 }, 0)
+                    .to('.cross--1', { y: -150, duration: 1 }, 0)
+                    .to('.cross--2', { y: -90, duration: 1 }, 0)
+                    .to('.cross--3', { y: -230, duration: 1 }, 0)
+                    .to('.cross--4', { y: -120, duration: 1 }, 0)
+                    .to('.bg-grid', { y: 60, duration: 1 }, 0);
+
+                /* ---- 6.5 ScrollTrigger: pin + alvo de progresso ---- */
+                let target = 0, smooth = 0, applied = -1;
+                const vh = isMobile ? CONFIG.SCROLL_LENGTH_VH_MOBILE : CONFIG.SCROLL_LENGTH_VH;
+                const header = $('#site-header');
+                const hint = $('#scroll-hint');
+                let hintHidden = false;
+
+                const st = ScrollTrigger.create({
+                    trigger: '#hero',
+                    start: 'top top',
+                    end: () => '+=' + Math.round(window.innerHeight * vh / 100),
+                    pin: true,
+                    anticipatePin: 1,
+                    invalidateOnRefresh: true,
+                    onUpdate: (self) => {
+                        target = self.progress;
+                        header.classList.toggle('is-scrolled', self.scroll() > 12);
+                        const hide = self.scroll() > 24;
+                        if (hide !== hintHidden) {                   // "Scroll to control" some suavemente
+                            hintHidden = hide;
+                            gsap.to(hint, { opacity: hide ? 0 : 1, y: hide ? 10 : 0, duration: .7, overwrite: true });
+                        }
+                    }
+                });
+
+                /* ---- 6.6 Indicador lateral (01–04) + estados dos blocos ---- */
+                const digits = $$('#prog-digits span');
+                const navLinks = $$('.nav a');
+                const intro = $('#intro'), final = $('#final');
+                const progFill = $('#prog-fill');
+                let chapter = 0;
+
+                const chapterOf = (p) => CONFIG.INDICATOR_BREAKS.filter(b => p >= b).length;
+                function setChapter(i) {
+                    if (i === chapter) return;
+                    const dir = i > chapter ? 1 : -1;
+                    gsap.to(digits[chapter], { yPercent: -100 * dir, opacity: 0, duration: .7, overwrite: true });
+                    gsap.fromTo(digits[i], { yPercent: 100 * dir, opacity: 0 }, { yPercent: 0, opacity: 1, duration: .7, overwrite: true });
+                    chapter = i;
+                    navLinks.forEach((a, k) => a.classList.toggle('is-active', k === i && i < 3));
+                }
+
+                function applyState(p) {
+                    scrollTL.progress(p);
+                    media.render(clamp(p / CONFIG.VIDEO_END_AT));
+                    gsap.set(progFill, { scaleY: p });
+                    setChapter(chapterOf(p));
+                    // blocos invisíveis não recebem foco nem clique
+                    intro.inert = p > .12;
+                    final.inert = p < CONFIG.FINAL_IN - .01;
+                    intro.style.pointerEvents = p > .12 ? 'none' : '';
+                }
+
+                /* ---- 6.7 Loop principal: suaviza o scroll → frame (scrub com interpolação) ---- */
+                gsap.ticker.add((time, deltaTime) => {
+                    const dt = Math.min(deltaTime, 64) / 1000;
+                    smooth += (target - smooth) * (1 - Math.exp(-dt * CONFIG.SMOOTHING));
+                    if (Math.abs(target - smooth) < 0.00008) smooth = target;
+                    if (smooth !== applied) { applied = smooth; applyState(smooth); }
+                    media.watch(performance.now());
+                });
+                applyState(0);
+
+                /* ---- 6.8 Navegação interna (links e botões levam ao capítulo certo) ---- */
+                const goTo = (p) => {
+                    const y = st.start + (st.end - st.start) * p;
+                    lenis.scrollTo(y, { duration: 2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)) });
+                };
+                $$('[data-goto]').forEach(a => a.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    goTo(parseFloat(a.dataset.goto));
+                }));
+                $$('.logo, .skip-link').forEach(a => a.addEventListener('click', (e) => { e.preventDefault(); lenis.scrollTo(0, { duration: 2 }); }));
+
+                /* ---- 6.9 Micro-interações ---- */
+                initBag();
+                initMagnetic();
+                initCursor();
+                initMouseParallax();
+
+                /* ---- 6.10 ANIMAÇÃO DE ENTRADA ---- */
+                const tl = gsap.timeline({
+                    defaults: { ease: 'ds' },
+                    onComplete: () => { lenis.start(); }
+                });
+
+                // cortina do loader sobe revelando a página
+                tl.to('.loader__inner', { y: -24, opacity: 0, duration: .6 }, 0)
+                    .to(loader, { yPercent: -100, duration: 1.15, ease: 'ds' }, .25)
+                    .set(loader, { display: 'none' })
+
+                    .to('.site-header', { opacity: 1, duration: 1.1 }, .6)
+                    .fromTo('.site-header', { y: -22 }, { y: 0, duration: 1.1 }, .6)
+                    .to([video, canvas], { opacity: 1, duration: 2, ease: 'power2.out' }, .55)
+                    .fromTo('.ring', { scale: .88 }, { scale: 1, duration: 2.2, stagger: .18 }, .55);
+
+                // linhas do título: de baixo para cima, com máscara + stagger
+                wordsPerLine.forEach((words, i) => {
+                    tl.to(words, { yPercent: 0, duration: 1.2, stagger: .07 }, .75 + i * .14);
+                });
+
+                // linha vazada: o contorno é "desenhado" e um preenchimento sutil aparece e some
+                tl.to('.tl--outline', { '--sa': .9, duration: 1.4, ease: 'power2.out' }, .95)
+                    .to('.tl--outline', { '--fa': .16, duration: .8, ease: 'power2.out' }, 1.15)
+                    .to('.tl--outline', { '--fa': 0, duration: 1.4, ease: 'power2.inOut' }, 1.95);
+
+                // parágrafo, botões, indicadores: fade + deslocamento em cascata
+                tl.fromTo('.lede', { y: 30 }, { y: 0, opacity: 1, duration: 1.2 }, 1.2)
+                    .fromTo('.intro .btn', { opacity: 0 }, { opacity: 1, duration: 1 }, 1.4)
+                    .to('.intro .btn', { yPercent: 0, duration: 1.2, stagger: .1 }, 1.4)
+                    .fromTo('.progress__inner', { x: 18 }, { x: 0, opacity: 1, duration: 1.2 }, 1.6)
+                    .fromTo('.hero__caption', { y: 12 }, { y: 0, opacity: 1, duration: 1.2 }, 1.7)
+                    .fromTo('.scroll-hint__inner', { y: 14 }, { y: 0, opacity: 1, duration: 1.2 }, 1.8);
+
+                // ScrollTrigger precisa recalcular depois que fontes/layout assentaram
+                ScrollTrigger.refresh();
+            }
+
+            /* ---- Botões magnéticos ---- */
+            function initMagnetic() {
+                if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+                $$('[data-magnetic]').forEach(el => {
+                    const label = $('.btn__label', el);
+                    let rect;
+                    el.addEventListener('pointerenter', () => {
+                        rect = el.getBoundingClientRect();
+                        gsap.to(el, { y: -3, duration: .6, overwrite: 'auto' });
+                    });
+                    el.addEventListener('pointermove', (e) => {
+                        if (!rect) return;
+                        const dx = e.clientX - (rect.left + rect.width / 2);
+                        const dy = e.clientY - (rect.top + rect.height / 2);
+                        gsap.to(el, { x: dx * .3, y: dy * .35 - 3, duration: .5, ease: 'power3.out', overwrite: 'auto' });
+                        gsap.to(label, { x: dx * .12, y: dy * .18, duration: .5, ease: 'power3.out', overwrite: 'auto' });
+                    });
+                    el.addEventListener('pointerleave', () => {
+                        gsap.to([el, label], { x: 0, y: 0, duration: 1.2, ease: 'elastic.out(1,.4)', overwrite: 'auto' });
+                    });
+                });
+            }
+
+            /* ---- Cursor customizado ---- */
+            function initCursor() {
+                if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+                const cursor = $('#cursor'), dot = $('.cursor__dot'), ring = $('.cursor__ring');
+                const dx = gsap.quickTo(dot, 'x', { duration: .12, ease: 'power3' });
+                const dy = gsap.quickTo(dot, 'y', { duration: .12, ease: 'power3' });
+                const rx = gsap.quickTo(ring, 'x', { duration: .55, ease: 'power3' });
+                const ry = gsap.quickTo(ring, 'y', { duration: .55, ease: 'power3' });
+                window.addEventListener('pointermove', (e) => {
+                    if (e.pointerType !== 'mouse') return;
+                    html.classList.add('has-cursor');
+                    dx(e.clientX); dy(e.clientY); rx(e.clientX); ry(e.clientY);
+                }, { passive: true });
+                document.addEventListener('pointerover', (e) => {
+                    cursor.classList.toggle('is-hover', !!e.target.closest('a, button, [data-cursor]'));
+                });
+                document.addEventListener('pointerleave', () => html.classList.remove('has-cursor'));
+            }
+
+            /* ---- Parallax sutil com o mouse (vídeo e anéis) ---- */
+            function initMouseParallax() {
+                if (!matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+                const targets = [
+                    { el: [video, canvas], amt: 14 },
+                    { el: '.ring--1', amt: 26 },
+                    { el: '.ring--2', amt: -18 }
+                ].map(t => ({
+                    amt: t.amt,
+                    x: gsap.quickTo(t.el, 'x', { duration: 1.2, ease: 'power3' }),
+                    y: gsap.quickTo(t.el, 'y', { duration: 1.2, ease: 'power3' })
+                }));
+                window.addEventListener('pointermove', (e) => {
+                    const nx = e.clientX / innerWidth - .5, ny = e.clientY / innerHeight - .5;
+                    targets.forEach(t => { t.x(nx * t.amt); t.y(ny * t.amt); });
+                }, { passive: true });
+            }
+
+            /* =================================================================
+               7. BOOT
+               ================================================================= */
+            const libsOK = window.gsap && window.ScrollTrigger && window.CustomEase && window.Lenis && window.SplitType;
+
+            if (isStatic() || !libsOK) {
+                bootStatic();
+            } else {
+                bootAnimated().catch((err) => {
+                    console.error('[Artools] Falha na experiência animada, usando modo estático.', err);
+                    bootStatic();
+                });
+            }
+        })();
+    </script>
+</body>
+
+</html>
